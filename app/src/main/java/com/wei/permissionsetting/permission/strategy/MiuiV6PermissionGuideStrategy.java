@@ -3,11 +3,8 @@ package com.wei.permissionsetting.permission.strategy;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
@@ -15,17 +12,14 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.wei.permissionsetting.MainActivity;
 import com.wei.permissionsetting.R;
 import com.wei.permissionsetting.permission.PermissionAccessibilityService;
 import com.wei.permissionsetting.util.MobileAutoOpenPermissionUtil;
 import com.wei.permissionsetting.util.PackageUtil;
-import com.wei.permissionsetting.util.PermissionGuideUtil;
 
 import java.util.List;
 
 import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK;
-import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_HOME;
 
 /**
  * @author: WEI
@@ -136,26 +130,36 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                 }
                 else if (MIUI_PACKAGES[3].equals(currentPkg))
                 {   // 保持后台运行，耗电
-                    while (!findTargetNodeInfo(paramAccessibilityService, appName))
-                    {
-                        List<AccessibilityNodeInfo> listViewNodes = rootInActiveWindow.
-                                findAccessibilityNodeInfosByViewId("com.miui.powerkeeper:id/apps_list");
-                        if (listViewNodes != null && listViewNodes.size() > 0)
-                        {
-                            AccessibilityNodeInfo nodeInfo = listViewNodes.get(0);
-                            nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                    if ("com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity".equals(currentClz))
+                    {  // 智能省电界面
+                        while (!findTargetNodeInfo(paramAccessibilityService, appName)) {
+                            List<AccessibilityNodeInfo> listViewNodes = rootInActiveWindow.
+                                    findAccessibilityNodeInfosByViewId("com.miui.powerkeeper:id/apps_list");
+                            if (listViewNodes != null && listViewNodes.size() > 0) {
+                                AccessibilityNodeInfo nodeInfo = listViewNodes.get(0);
+                                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                            }
+                        }
+                        List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText(appName);
+                        if (nodeInfos != null && nodeInfos.size() > 0) {
+                            AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
+                            nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                         }
                     }
-                    List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText(appName);
-                    if (nodeInfos != null && nodeInfos.size() > 0) {
-                        AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
-                        nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    else if ("com.miui.powerkeeper.ui.HiddenAppsConfigActivity".equals(currentClz))
+                    {    // 后台配置界面
+                        List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText("无限制");
+                        if (null != nodeInfos && nodeInfos.size() > 0) {
+                            AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
+                            nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        }
                     }
                 }
             }
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private AccessibilityNodeInfo getClickable(AccessibilityNodeInfo accessibilityNodeInfo)
     {
         if (accessibilityNodeInfo.isClickable())
@@ -207,6 +211,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
         mContext.startActivity(localIntent1);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void recycle(AccessibilityNodeInfo appNodeInfo) {
         AccessibilityNodeInfo parentNodeInfo = appNodeInfo.getParent();
         int childCount = parentNodeInfo.getChildCount();
