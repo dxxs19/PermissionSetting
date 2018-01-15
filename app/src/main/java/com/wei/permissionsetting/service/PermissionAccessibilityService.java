@@ -53,13 +53,18 @@ public class PermissionAccessibilityService extends AccessibilityService {
             Log.e(TAG, "root == null");
             return;
         }
+
+        List<AccessibilityNodeInfo> nodeInfoList = root.findAccessibilityNodeInfosByText("免疫内分泌科");
+        root.getContentDescription();
+        Log.e(TAG, "nodeInfoList = " + nodeInfoList);
+
+//        root.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         String appName = getResources().getString(R.string.app_name);
         Log.e(TAG, "appName : " + appName);
         if ("com.miui.permcenter.autostart.AutoStartManagementActivity".equals(mCurrentClass)) {
             List<AccessibilityNodeInfo> nodeInfos = root.findAccessibilityNodeInfosByText(appName);
             if (null != nodeInfos && nodeInfos.size() > 0) {
                 recycle(nodeInfos.get(0));
-
                 performGlobalAction(GLOBAL_ACTION_HOME);
             }
         }

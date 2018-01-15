@@ -4,7 +4,7 @@
     android:description="@string/app_name"
     android:accessibilityEventTypes="typeAllMask"
     android:accessibilityFeedbackType="feedbackGeneric"
-    android:packageNames="com.miui.securitycenter"
+    android:packageNames=""
     android:notificationTimeout="1000"
     android:accessibilityFlags=""
     android:canRetrieveWindowContent="true"/>
