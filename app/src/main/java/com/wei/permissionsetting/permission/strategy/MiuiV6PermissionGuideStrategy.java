@@ -3,7 +3,6 @@ package com.wei.permissionsetting.permission.strategy;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -13,15 +12,12 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.wei.permissionsetting.MainActivity;
 import com.wei.permissionsetting.R;
-import com.wei.permissionsetting.permission.PermissionAccessibilityService;
-import com.wei.permissionsetting.util.MobileAutoOpenPermissionUtil;
 import com.wei.permissionsetting.util.PackageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK;
 
 /**
  * @author: WEI
@@ -142,7 +138,6 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                         if (mPermissionList.size() == 0)
                         {
                             Log.e(TAG, "finish");
-
                             return;
                         }
                         String text = mPermissionList.get(0);
@@ -157,28 +152,6 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                                 mPermissionList.remove(text);
                             }
                         }
-//                        if (mAccessibilityNodeInfos.size() == 0 && isFirstAddData)
-//                        {
-//                            isFirstAddData = false;
-//                            List<AccessibilityNodeInfo> nodeInfos = getNodeInfosById(rootInActiveWindow, "android:id/list");
-//                            if (nodeInfos != null) {
-//                                AccessibilityNodeInfo listNodeInfo = nodeInfos.get(0);
-//                                int childCount = listNodeInfo.getChildCount();
-//                                for (int i = 0; i < childCount; i++) {
-//                                    AccessibilityNodeInfo childNodeInfo = listNodeInfo.getChild(i);
-//                                    if ("android.widget.LinearLayout".equals(childNodeInfo.getClassName())) {
-//                                        mAccessibilityNodeInfos.add(childNodeInfo);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        if (mAccessibilityNodeInfos.size() > 0) {
-//                            AccessibilityNodeInfo firstNode = mAccessibilityNodeInfos.get(0);
-//                            if (firstNode != null) {
-//                                performAction(firstNode, AccessibilityNodeInfo.ACTION_CLICK);
-//                                mAccessibilityNodeInfos.remove(firstNode);
-//                            }
-//                        }
                     }
                     else if ("android.widget.ListView".equals(currentClz))
                     {
@@ -214,7 +187,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                         if (null != nodeInfos && nodeInfos.size() > 0) {
                             AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
                             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                            startToActivity("com.android.settings", "com.android.settings.applications.InstalledAppDetailsTop");
+                            actionAppDetailsSetting();
                         }
                     }
                 }
@@ -241,7 +214,6 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
             }
         }
     }
-
 
     /**
      * 跳到自启动设置界面

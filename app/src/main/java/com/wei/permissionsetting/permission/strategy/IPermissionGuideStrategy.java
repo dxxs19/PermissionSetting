@@ -152,15 +152,12 @@ public abstract class  IPermissionGuideStrategy
     }
 
     /**
-     * 跳转到指定界面
-     * @param pkg
-     * @param clz
+     * 跳转到app设置界面
      */
-    public void startToActivity(String pkg, String clz)
+    public void actionAppDetailsSetting()
     {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.setClassName(pkg, clz);
         intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
         intent.setData(Uri.fromParts("package", mContext.getPackageName(), null));
         mContext.startActivity(intent);

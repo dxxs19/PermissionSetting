@@ -1,12 +1,15 @@
 package com.wei.permissionsetting;
 
 import android.accessibilityservice.AccessibilityService;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
@@ -22,11 +25,29 @@ public class MainActivity extends AppCompatActivity
     private final String TAG = getClass().getSimpleName();
     private AccessibilityService mService;
     private IPermissionGuideStrategy mStrategy;
+    private static MainActivity mMainActivity;
+
+    public static void startToMainActivity(Context context)
+    {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setClassName(context.getPackageName(), "com.wei.permissionsetting.MainActivity");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void showWindow()
+    {
+        View view = LayoutInflater.from(mMainActivity).inflate(R.layout.activity_main, null);
+        Dialog dialog = new Dialog(mMainActivity, R.style.Dialog);
+        dialog.setContentView(view);
+        dialog.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mMainActivity = this;
         PermissionAccessibilityService.setAccessibilityListener(mListenner);
     }
 
