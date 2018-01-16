@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         {
             if ((mService != null) && (mStrategy != null))
             {
-                Log.e(TAG, "onAccessibilityEvent");
+//                Log.e(TAG, "onAccessibilityEvent");
                 mStrategy.handleAccessbilityEvent(paramAnonymousAccessibilityEvent, mService);
             }
         }
@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        showToast();
-        Button button = new Button(this);
+//        showToast();
+//        Button button = new Button(this);
 //        button.setOnClickListener();
     }
 
