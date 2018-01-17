@@ -1,6 +1,8 @@
 package com.wei.permissionsetting.permission.strategy;
 
+import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
+import android.view.accessibility.AccessibilityEvent;
 
 /**
  * @author: WEI
@@ -24,6 +26,16 @@ public class DefaultStrategy extends IPermissionGuideStrategy {
 
     @Override
     public void actionPermissionsEditor() {
+
+    }
+
+    @Override
+    public void handleAccessbilityEvent(AccessibilityEvent paramAccessibilityEvent, AccessibilityService paramAccessibilityService) {
+
+    }
+
+    @Override
+    public void configAccessbility(AccessibilityService paramAccessibilityService) {
 
     }
 }

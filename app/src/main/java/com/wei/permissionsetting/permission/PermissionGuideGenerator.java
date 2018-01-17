@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.wei.permissionsetting.permission.strategy.DefaultStrategy;
 import com.wei.permissionsetting.permission.strategy.IPermissionGuideStrategy;
-import com.wei.permissionsetting.permission.strategy.MiuiV6PermissionGuideStrategy;
+import com.wei.permissionsetting.permission.strategy.meizu.MeizuPermissionGuideStrategy;
+import com.wei.permissionsetting.permission.strategy.xiaomi.MiuiV6PermissionGuideStrategy;
 import com.wei.permissionsetting.util.OSUtil;
+import com.wei.permissionsetting.util.PackageUtil;
 
 /**
  * @author: WEI
@@ -28,6 +30,10 @@ public class PermissionGuideGenerator
         if (OSUtil.isMiuiV9())
         {
             return new MiuiV6PermissionGuideStrategy(paramContext, paramBoolean);
+        }
+        if (PackageUtil.isPackageInstalled(paramContext, "com.meizu.safe"))
+        {
+            return new MeizuPermissionGuideStrategy(paramContext, paramBoolean);
         }
         return new DefaultStrategy(paramContext);
     }

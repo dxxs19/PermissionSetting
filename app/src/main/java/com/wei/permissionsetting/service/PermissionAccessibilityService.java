@@ -87,7 +87,6 @@ public class PermissionAccessibilityService extends AccessibilityService {
                         if (!nodeInfo.isChecked()) {
                             Log.e(TAG, nodeInfo.isChecked() + "");
                             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-
                         }
                     }
                 }, 500);

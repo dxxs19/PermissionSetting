@@ -24,7 +24,7 @@ import java.util.List;
 
 public abstract class  IPermissionGuideStrategy
 {
-    private final String TAG = getClass().getSimpleName();
+    protected final String TAG = getClass().getSimpleName();
     public Context mContext = null;
 
     public IPermissionGuideStrategy(Context paramContext) {
@@ -89,6 +89,7 @@ public abstract class  IPermissionGuideStrategy
             return null;
         }
         List<AccessibilityNodeInfo> nodeInfos = root.findAccessibilityNodeInfosByViewId(viewId);
+        Log.e(TAG, "getNodeInfosById, nodeInfos = " + ( nodeInfos == null ? 0 : nodeInfos.size()) );
         return (nodeInfos != null && nodeInfos.size() > 0) ? nodeInfos : null;
     }
 
@@ -117,15 +118,15 @@ public abstract class  IPermissionGuideStrategy
      * 是否存在目标结点
      *
      * @param paramAccessibilityService
-     * @param appName
+     * @param targetTxt
      * @return
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public boolean isTargetNodeExists (AccessibilityService paramAccessibilityService, String appName)
+    public boolean isTargetNodeExists (AccessibilityService paramAccessibilityService, String targetTxt)
     {
         AccessibilityNodeInfo rootInActiveWindow = paramAccessibilityService.getRootInActiveWindow();
         if (rootInActiveWindow != null) {
-            List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText(appName);
+            List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText(targetTxt);
             return nodeInfos != null && nodeInfos.size() > 0;
         }
         return false;
@@ -168,11 +169,11 @@ public abstract class  IPermissionGuideStrategy
      * @param paramAccessibilityEvent
      * @param paramAccessibilityService
      */
-    public void handleAccessbilityEvent(AccessibilityEvent paramAccessibilityEvent, AccessibilityService paramAccessibilityService) { }
+    public abstract void handleAccessbilityEvent(AccessibilityEvent paramAccessibilityEvent, AccessibilityService paramAccessibilityService);
 
     /**
      * 服务开启后进行相关配置
      * @param paramAccessibilityService
      */
-    public void configAccessbility(AccessibilityService paramAccessibilityService) {}
+    public abstract void configAccessbility(AccessibilityService paramAccessibilityService);
 }

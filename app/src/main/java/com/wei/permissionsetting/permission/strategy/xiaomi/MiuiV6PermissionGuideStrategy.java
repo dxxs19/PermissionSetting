@@ -1,4 +1,4 @@
-package com.wei.permissionsetting.permission.strategy;
+package com.wei.permissionsetting.permission.strategy.xiaomi;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -14,19 +14,20 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.wei.permissionsetting.MainActivity;
 import com.wei.permissionsetting.R;
+import com.wei.permissionsetting.permission.strategy.IPermissionGuideStrategy;
 import com.wei.permissionsetting.util.PackageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 小米权限辅助设置策略
  * @author: WEI
  * @date: 2018/1/15
  */
 
 public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
 {
-    public final String TAG = getClass().getSimpleName();
     private static final String APP_PERMISSION_ACTIVITY_NAME = "com.miui.permcenter.permissions.PermissionsEditorActivity";
     private static final String APP_V813_PERMISSION_ACTIVITY_NAME = "com.miui.permcenter.permissions.AppPermissionsEditorActivity";
     private static final String APP_V91_PERMISSION_ACTIVITY_NAME = "com.miui.appmanager.AppManagerMainActivity";
@@ -103,12 +104,12 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
         localAccessibilityServiceInfo.flags |= 0x10;
         paramAccessibilityService.setServiceInfo(localAccessibilityServiceInfo);
         paramAccessibilityService.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+        mAutoStartClick = false;
         // 跳到自启动设置界面
         actionAutoBootPermission();
     }
 
-    private boolean isFirstAddData = true;
-    private List<AccessibilityNodeInfo> mAccessibilityNodeInfos = new ArrayList<>();
+    private boolean mAutoStartClick = false;
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void handleAccessbilityEvent(AccessibilityEvent paramAccessibilityEvent, AccessibilityService paramAccessibilityService) {
@@ -116,22 +117,64 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
         String currentPkg = (String) paramAccessibilityEvent.getPackageName();
         String currentClz = (String) paramAccessibilityEvent.getClassName();
         Log.e(TAG, "eventType = " + eventType + ", pkgname = " + currentPkg + ", clsname = " + currentClz);
+        AccessibilityNodeInfo rootInActiveWindow;
         if (((eventType == 4096) || (eventType == 2048) || (eventType == 32)) && (paramAccessibilityEvent.getPackageName() != null))
         {
-            AccessibilityNodeInfo rootInActiveWindow = paramAccessibilityService.getRootInActiveWindow();
+            rootInActiveWindow = paramAccessibilityService.getRootInActiveWindow();
             if (rootInActiveWindow != null)
             {
-                /// TODO
-                String appName = mContext.getResources().getString(R.string.app_name);
+                final String appName = mContext.getResources().getString(R.string.app_name);
                 if (MIUI_PACKAGES[0].equals(currentPkg))
                 {
                     if ("com.miui.permcenter.autostart.AutoStartManagementActivity".equals(currentClz))
                     { // 开启自启动
-                        List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText(appName);
+                        while (!isTargetNodeExists(paramAccessibilityService, appName)) {
+                            List<AccessibilityNodeInfo> listViewNodes = getNodeInfosById(rootInActiveWindow,
+                                    "com.miui.securitycenter:id/list_view");
+                            if (listViewNodes != null) {
+                                AccessibilityNodeInfo nodeInfo = listViewNodes.get(0);
+                                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                            }
+                        }
+                        List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, appName);
                         if (null != nodeInfos && nodeInfos.size() > 0) {
                             recycle(nodeInfos.get(0));
-                            actionPowerPermisssion();
+//                            actionPowerPermisssion();
                         }
+//                        if (!mAutoStartClick)
+//                        {
+//                            List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, appName);
+//                            if (nodeInfos != null && nodeInfos.size() > 0) {
+//                                AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
+//                                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+//                                mAutoStartClick = true;
+//                            }
+//                        }
+//                        else
+//                        {
+//                            final List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, appName);
+//                            if (null != nodeInfos && nodeInfos.size() > 0) {
+//                                recycle(nodeInfos.get(0));
+//                            actionPowerPermisssion();
+//                            }
+//                        }
+                    }
+                    else if ("com.miui.permcenter.autostart.AutoStartDetailManagementActivity".equals(currentClz))
+                    {
+                        // 自启详情
+                        List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, "允许");
+                        if (nodeInfos != null)
+                        {
+                            for (AccessibilityNodeInfo nodeInfo:nodeInfos) {
+                                recycle(nodeInfo);
+                            }
+                        }
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
                     }
                     else if ("com.miui.permcenter.permissions.PermissionsEditorActivity".equals(currentClz))
                     { // 权限管理
@@ -205,7 +248,6 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                         }
                         List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText("权限管理");
                         if (nodeInfos != null && nodeInfos.size() > 0) {
-                            isFirstAddData = true;
                             AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
                             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                         }
