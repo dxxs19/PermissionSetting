@@ -98,12 +98,13 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
         localAccessibilityServiceInfo.flags |= 0x10;
         paramAccessibilityService.setServiceInfo(localAccessibilityServiceInfo);
         paramAccessibilityService.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
-        mAutoStartClick = false;
+        mIsFinish = false;
         // 跳到自启动设置界面
         actionAutoBootPermission();
+        showFloatWindow(paramAccessibilityService);
     }
 
-    private boolean mAutoStartClick = false;
+    private boolean mIsFinish = false;
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void handleAccessbilityEvent(AccessibilityEvent paramAccessibilityEvent, AccessibilityService paramAccessibilityService) {
@@ -120,6 +121,18 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                 final String appName = mContext.getResources().getString(R.string.app_name);
                 if (MIUI_PACKAGES[0].equals(currentPkg))
                 {
+                    if (mIsFinish)
+                    {
+                        performGlobalAction(GLOBAL_ACTION_BACK);
+                        mIsFinish = false;
+                        sHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                removeFloatWindow();
+                            }
+                        }, 500);
+                        return;
+                    }
                     if ("com.miui.permcenter.autostart.AutoStartManagementActivity".equals(currentClz))
                     { // 开启自启动
                         while (!isTargetNodeExists(paramAccessibilityService, appName)) {
@@ -133,7 +146,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                         List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, appName);
                         if (null != nodeInfos && nodeInfos.size() > 0) {
                             recycle(nodeInfos.get(0));
-//                            actionPowerPermisssion();
+                            actionPowerPermisssion();
                         }
 //                        if (!mAutoStartClick)
 //                        {
@@ -175,6 +188,8 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                         if (mPermissionList.size() == 0)
                         {
                             Log.e(TAG, "finish");
+                            mIsFinish = true;
+                            goBack();
                             return;
                         }
                         String text = mPermissionList.get(0);
@@ -202,6 +217,11 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                 }
                 else if (MIUI_PACKAGES[3].equals(currentPkg))
                 {   // 保持后台运行，耗电
+                    if (mIsFinish)
+                    {
+                        performGlobalAction(GLOBAL_ACTION_BACK);
+                        return;
+                    }
                     if ("com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity".equals(currentClz))
                     {  // 智能省电界面
                         while (!isTargetNodeExists(paramAccessibilityService, appName)) {
@@ -230,6 +250,11 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                 }
                 else if ("com.android.settings".equals(currentPkg))
                 {
+                    if (mIsFinish)
+                    {
+                        performGlobalAction(GLOBAL_ACTION_BACK);
+                        return;
+                    }
                     if ("com.android.settings.applications.InstalledAppDetailsTop".equals(currentClz))
                     {
                         while (!isTargetNodeExists(paramAccessibilityService, "权限管理")) {
@@ -248,6 +273,16 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                     }
                 }
             }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void goBack()
+    {
+        if (mIsFinish)
+        {
+            performGlobalAction(GLOBAL_ACTION_BACK);
+            return;
         }
     }
 

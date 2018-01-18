@@ -15,7 +15,11 @@ import android.os.Handler;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -217,4 +221,36 @@ public abstract class  IPermissionGuideStrategy
      * @param paramAccessibilityService
      */
     public abstract void configAccessbility(AccessibilityService paramAccessibilityService);
+
+    ConstraintLayout mConstraintLayout;
+    WindowManager.LayoutParams mLayoutParams;
+    WindowManager mWindowManager;
+    protected void showFloatWindow(AccessibilityService accessibilityService)
+    {
+        mLayoutParams = new WindowManager.LayoutParams();
+        mWindowManager = (WindowManager) accessibilityService.getApplication().getSystemService(Context.WINDOW_SERVICE);
+        mLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        mLayoutParams.flags = 8;
+        mLayoutParams.format = -3;
+        mLayoutParams.gravity = Gravity.CENTER;
+        mLayoutParams.width = 1000;
+        mLayoutParams.height = 1600;
+        LayoutInflater inflater = LayoutInflater.from(accessibilityService);
+        mConstraintLayout = (ConstraintLayout) inflater.inflate(R.layout.window_float, null);
+        mWindowManager.addView(mConstraintLayout, mLayoutParams);
+    }
+
+    protected void removeFloatWindow()
+    {
+        if (mConstraintLayout != null)
+        {
+            try{
+                mWindowManager.removeView(mConstraintLayout);
+            }
+            catch (Exception e)
+            {
+                Log.e(TAG, "悬浮窗口已移除");
+            }
+        }
+    }
 }
