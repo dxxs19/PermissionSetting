@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.wei.permissionsetting.MainActivity;
 import com.wei.permissionsetting.R;
 import com.wei.permissionsetting.permission.strategy.IPermissionGuideStrategy;
 import com.wei.permissionsetting.util.PackageUtil;
@@ -39,7 +38,6 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
     private Handler mH = null;
     private String mMiuiVersion;
     private VERSION mVersion;
-    private static Handler sHandler = new Handler();
     private List<String> mPermissionList = new ArrayList<>();
 
     private enum VERSION
@@ -50,11 +48,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
 
     public MiuiV6PermissionGuideStrategy(Context paramContext, boolean paramBoolean) {
         super(paramContext);
-        String[] permissionArray = mContext.getResources().getStringArray(R.array.Xiaomi_miuiV6_permissions);
-        for (int i = 0; i < permissionArray.length; i ++)
-        {
-            mPermissionList.add(permissionArray[i]);
-        }
+        mPermissionList = getPermissionList(R.array.Xiaomi_miuiV6_permissions);
         if (Build.VERSION.SDK_INT == 25)
         {
             this.mDetectTimeout = true;
@@ -133,7 +127,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                                     "com.miui.securitycenter:id/list_view");
                             if (listViewNodes != null) {
                                 AccessibilityNodeInfo nodeInfo = listViewNodes.get(0);
-                                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                                nodeInfo.performAction(ACTION_SCROLL_FORWARD);
                             }
                         }
                         List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, appName);
@@ -191,7 +185,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                             if (nodeInfos != null)
                             {
                                 AccessibilityNodeInfo nodeInfo = nodeInfos.get(0);
-                                performAction(getClickable(nodeInfo), AccessibilityNodeInfo.ACTION_CLICK);
+                                performAction(getClickableParent(nodeInfo), AccessibilityNodeInfo.ACTION_CLICK);
                                 mPermissionList.remove(text);
                             }
                         }
@@ -202,7 +196,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                         if (nodeInfos != null)
                         {
                             AccessibilityNodeInfo nodeInfo = nodeInfos.get(0);
-                            performAction( getClickable( nodeInfo ), AccessibilityNodeInfo.ACTION_CLICK);
+                            performAction( getClickableParent( nodeInfo ), AccessibilityNodeInfo.ACTION_CLICK);
                         }
                     }
                 }
@@ -215,12 +209,12 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                                     findAccessibilityNodeInfosByViewId("com.miui.powerkeeper:id/apps_list");
                             if (listViewNodes != null && listViewNodes.size() > 0) {
                                 AccessibilityNodeInfo nodeInfo = listViewNodes.get(0);
-                                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                                nodeInfo.performAction(ACTION_SCROLL_FORWARD);
                             }
                         }
                         List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText(appName);
                         if (nodeInfos != null && nodeInfos.size() > 0) {
-                            AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
+                            AccessibilityNodeInfo nodeInfo = getClickableParent(nodeInfos.get(0));
                             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                         }
                     }
@@ -228,7 +222,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                     {    // 后台配置界面
                         List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText("无限制");
                         if (null != nodeInfos && nodeInfos.size() > 0) {
-                            AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
+                            AccessibilityNodeInfo nodeInfo = getClickableParent(nodeInfos.get(0));
                             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                             actionAppDetailsSetting();
                         }
@@ -243,12 +237,12 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                                     findAccessibilityNodeInfosByViewId("android:id/list");
                             if (listViewNodes != null && listViewNodes.size() > 0) {
                                 AccessibilityNodeInfo nodeInfo = listViewNodes.get(0);
-                                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                                nodeInfo.performAction(ACTION_SCROLL_FORWARD);
                             }
                         }
                         List<AccessibilityNodeInfo> nodeInfos = rootInActiveWindow.findAccessibilityNodeInfosByText("权限管理");
                         if (nodeInfos != null && nodeInfos.size() > 0) {
-                            AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
+                            AccessibilityNodeInfo nodeInfo = getClickableParent(nodeInfos.get(0));
                             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                         }
                     }

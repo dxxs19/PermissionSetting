@@ -8,4 +8,14 @@
         <item >锁屏显示</item>
         <item >显示悬浮窗</item>
     </string-array>
+
+    <string-array name="Meizu_permissions">
+        <!--<item >桌面悬浮窗</item>-->
+        <item >锁屏下显示界面</item>
+        <item >拨打电话</item>
+        <item >获取定位</item>
+        <item >拍照和录像</item>
+        <item >读取应用列表</item>
+        <item >获取手机识别码</item>
+    </string-array>
 </resources>

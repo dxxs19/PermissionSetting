@@ -11,6 +11,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.support.annotation.ArrayRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -19,21 +22,27 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.wei.permissionsetting.R;
 import com.wei.permissionsetting.permission.PermissionAccessibilityService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class  IPermissionGuideStrategy
 {
     protected final String TAG = getClass().getSimpleName();
+    public static final int ACTION_CLICK;
+    public static final int GLOBAL_ACTION_BACK;
+    public static final int ACTION_SCROLL_FORWARD;
     public Context mContext = null;
+    protected static Handler sHandler = new Handler();
+
+    static {
+        ACTION_CLICK = AccessibilityNodeInfo.ACTION_CLICK;
+        ACTION_SCROLL_FORWARD = AccessibilityNodeInfo.ACTION_SCROLL_FORWARD;
+        GLOBAL_ACTION_BACK = AccessibilityService.GLOBAL_ACTION_BACK;
+    }
 
     public IPermissionGuideStrategy(Context paramContext) {
         mContext = paramContext;
-    }
-
-    public void clickAutoBootPermission()
-    {
-        actionAutoBootPermission();
     }
 
     /**
@@ -51,10 +60,20 @@ public abstract class  IPermissionGuideStrategy
      */
     public abstract void actionPermissionsEditor();
 
-    public List<String> getPermissionList(int resId)
+    /**
+     * 获取权限列表
+     * @param resId
+     * @return
+     */
+    public List<String> getPermissionList(@ArrayRes int resId)
     {
+        List<String> mPermissionList = new ArrayList<>();
         String[] permissionArray = mContext.getResources().getStringArray(resId);
-        return Arrays.asList(permissionArray);
+        for (int i = 0; i < permissionArray.length; i ++)
+        {
+            mPermissionList.add(permissionArray[i]);
+        }
+        return mPermissionList;
     }
 
     /**
@@ -63,14 +82,21 @@ public abstract class  IPermissionGuideStrategy
      * @param targetTxt
      * @return
      */
-    public List<AccessibilityNodeInfo> getNodeInfosByText(AccessibilityNodeInfo root, String targetTxt)
-    {
-        if (root == null)
-        {
+    public List<AccessibilityNodeInfo> getNodeInfosByText(AccessibilityNodeInfo root, @NonNull String... targetTxt) {
+        if (root == null) {
             Log.e(TAG, "root == null");
             return null;
         }
-        List<AccessibilityNodeInfo> nodeInfos = root.findAccessibilityNodeInfosByText(targetTxt);
+        List<AccessibilityNodeInfo> nodeInfos = new ArrayList<>();
+        int len = targetTxt.length;
+        for (int i = 0; i < len; i ++)
+        {
+            List<AccessibilityNodeInfo> nodeInfos1 = root.findAccessibilityNodeInfosByText(targetTxt[i]);
+            if (nodeInfos1 != null && nodeInfos1.size() > 0)
+            {
+                nodeInfos.addAll(nodeInfos1);
+            }
+        }
         return (nodeInfos != null && nodeInfos.size() > 0) ? nodeInfos : null;
     }
 
@@ -94,12 +120,12 @@ public abstract class  IPermissionGuideStrategy
     }
 
     /**
-     * 遍历查找到可以点击的结点
+     * 遍历查找到可以点击的父结点
      * @param accessibilityNodeInfo
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public AccessibilityNodeInfo getClickable(AccessibilityNodeInfo accessibilityNodeInfo)
+    public AccessibilityNodeInfo getClickableParent(AccessibilityNodeInfo accessibilityNodeInfo)
     {
         if (accessibilityNodeInfo.isClickable())
         {
@@ -108,7 +134,7 @@ public abstract class  IPermissionGuideStrategy
         AccessibilityNodeInfo parent = accessibilityNodeInfo.getParent();
         while (!parent.isClickable())
         {
-            getClickable(parent);
+            getClickableParent(parent);
         }
         return parent;
     }
@@ -150,6 +176,21 @@ public abstract class  IPermissionGuideStrategy
     public void performAction(AccessibilityNodeInfo nodeInfo, int action)
     {
         nodeInfo.performAction(action);
+    }
+
+    /**
+     * 向下滑动滚动条
+     * @param rootInActiveWindow
+     * @param viewId
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    public void performScrollForward(AccessibilityNodeInfo rootInActiveWindow, String viewId)
+    {
+        List<AccessibilityNodeInfo> listViewNodes = getNodeInfosById(rootInActiveWindow,viewId);
+        if (listViewNodes != null) {
+            AccessibilityNodeInfo nodeInfo = listViewNodes.get(0);
+            performAction(nodeInfo, ACTION_SCROLL_FORWARD);
+        }
     }
 
     /**
