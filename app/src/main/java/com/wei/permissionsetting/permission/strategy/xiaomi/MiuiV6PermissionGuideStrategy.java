@@ -14,6 +14,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.wei.permissionsetting.R;
 import com.wei.permissionsetting.permission.strategy.IPermissionGuideStrategy;
+import com.wei.permissionsetting.util.OSUtil;
 import com.wei.permissionsetting.util.PackageUtil;
 
 import java.util.ArrayList;
@@ -125,12 +126,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                     {
                         performGlobalAction(GLOBAL_ACTION_BACK);
                         mIsFinish = false;
-                        sHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                removeFloatWindow();
-                            }
-                        }, 500);
+                        removeFloatWindow();
                         return;
                     }
                     if ("com.miui.permcenter.autostart.AutoStartManagementActivity".equals(currentClz))
@@ -148,23 +144,6 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                             recycle(nodeInfos.get(0));
                             actionPowerPermisssion();
                         }
-//                        if (!mAutoStartClick)
-//                        {
-//                            List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, appName);
-//                            if (nodeInfos != null && nodeInfos.size() > 0) {
-//                                AccessibilityNodeInfo nodeInfo = getClickable(nodeInfos.get(0));
-//                                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//                                mAutoStartClick = true;
-//                            }
-//                        }
-//                        else
-//                        {
-//                            final List<AccessibilityNodeInfo> nodeInfos = getNodeInfosByText(rootInActiveWindow, appName);
-//                            if (null != nodeInfos && nodeInfos.size() > 0) {
-//                                recycle(nodeInfos.get(0));
-//                            actionPowerPermisssion();
-//                            }
-//                        }
                     }
                     else if ("com.miui.permcenter.autostart.AutoStartDetailManagementActivity".equals(currentClz))
                     {
@@ -248,7 +227,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
                         }
                     }
                 }
-                else if ("com.android.settings".equals(currentPkg))
+                else if (MIUI_PACKAGES[2].equals(currentPkg))
                 {
                     if (mIsFinish)
                     {
@@ -292,9 +271,17 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
     @Override
     public void actionAutoBootPermission()
     {
-        Intent intent = new Intent();
-        intent.setClassName(MIUI_PACKAGES[0], "com.miui.permcenter.autostart.AutoStartManagementActivity");
-        mContext.startActivity(intent);
+        try
+        {
+            Intent intent = new Intent();
+            intent.setClassName(MIUI_PACKAGES[0], "com.miui.permcenter.autostart.AutoStartManagementActivity");
+            intent.putExtra("packageName", mContext.getPackageName());
+            mContext.startActivity(intent);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     /**
@@ -302,9 +289,16 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
      */
     @Override
     public void actionPowerPermisssion() {
-        Intent localIntent1 = new Intent();
-        localIntent1.setClassName(MIUI_PACKAGES[3], "com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity");
-        mContext.startActivity(localIntent1);
+        try
+        {
+            Intent localIntent1 = new Intent();
+            localIntent1.setClassName(MIUI_PACKAGES[3], "com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity");
+            mContext.startActivity(localIntent1);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     /**
@@ -312,9 +306,16 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
      */
     @Override
     public void actionPermissionsEditor() {
-        Intent intent = new Intent();
-        intent.setClassName(MIUI_PACKAGES[0], "com.miui.permcenter.permissions.PermissionsEditorActivity");
-        mContext.startActivity(intent);
+        try
+        {
+            Intent intent = new Intent();
+            intent.setClassName(MIUI_PACKAGES[0], "com.miui.permcenter.permissions.PermissionsEditorActivity");
+            mContext.startActivity(intent);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)

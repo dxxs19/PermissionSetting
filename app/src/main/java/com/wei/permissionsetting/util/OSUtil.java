@@ -1,5 +1,7 @@
 package com.wei.permissionsetting.util;
 
+import android.os.Build;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -63,5 +65,13 @@ public class OSUtil
             }
         }
         return line;
+    }
+
+    /**
+     * 获取设备品牌
+     * @return
+     */
+    public static String getMobileType(){
+        return Build.MANUFACTURER;
     }
 }

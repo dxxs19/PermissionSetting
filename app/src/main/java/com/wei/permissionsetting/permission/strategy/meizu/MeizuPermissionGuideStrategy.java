@@ -29,18 +29,17 @@ public class MeizuPermissionGuideStrategy extends IPermissionGuideStrategy
     private static final String MEIZU_SEC_PACKAGE_NAME = "com.meizu.safe";
     private static final String MEIZU_RUNIN_BACKGROUND = "后台管理";
     private static final String MEIZU_RUNIN_BACKGROUND_ALLOW = "允许后台运行";
-    private List<String> mPermissionList = new ArrayList<>();
+//    private List<String> mPermissionList = new ArrayList<>();
 
     public MeizuPermissionGuideStrategy(Context paramContext, boolean paramBoolean) {
         super(paramContext);
-        mPermissionList = getPermissionList(R.array.Meizu_permissions);
+//        mPermissionList = getPermissionList(R.array.Meizu_permissions);
     }
 
     @Override
     public void actionAutoBootPermission() {
-        Intent localIntent;
         try {
-            localIntent = new Intent();
+            Intent localIntent = new Intent();
             localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             localIntent.setClassName(MEIZU_SEC_PACKAGE_NAME, MEIZU_SEC_APP_SETTINGS_ACTIVITY);
             localIntent.putExtra("packageName", mContext.getPackageName());

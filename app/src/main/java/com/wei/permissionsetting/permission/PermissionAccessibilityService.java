@@ -6,7 +6,10 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.wei.permissionsetting.MainActivity;
+
 /**
+ * 无障碍服务，事件由此分发至各种机型策略处理
  * @author: WEI
  * @date: 2018/1/15
  */
@@ -29,7 +32,7 @@ public class PermissionAccessibilityService extends AccessibilityService
     public void onAccessibilityEvent(AccessibilityEvent event) {
         int eventType = event.getEventType();
         Log.e(TAG, "eventType : " + eventType);
-        if (sListenner != null)
+        if (sListenner != null && !MainActivity.isFinish)
         {
             sListenner.onAccessibilityEvent(event);
         }

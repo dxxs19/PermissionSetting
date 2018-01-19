@@ -1,6 +1,7 @@
 package com.wei.permissionsetting.permission.strategy;
 
 /**
+ * 所有机型的权限设置策略父类
  * @author: WEI
  * @date: 2018/1/15
  */
@@ -16,6 +17,7 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.wei.permissionsetting.R;
 import com.wei.permissionsetting.permission.PermissionAccessibilityService;
+import com.wei.permissionsetting.util.SizeUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -233,14 +236,18 @@ public abstract class  IPermissionGuideStrategy
         mLayoutParams.flags = 8;
         mLayoutParams.format = -3;
         mLayoutParams.gravity = Gravity.CENTER;
-        mLayoutParams.width = 1000;
-        mLayoutParams.height = 1600;
+        DisplayMetrics displayMetrics = accessibilityService.getBaseContext().getResources().getDisplayMetrics();
+//        mLayoutParams.width = 1000;
+//        mLayoutParams.height = 1600;
+        mLayoutParams.width = displayMetrics.widthPixels;
+        mLayoutParams.height = displayMetrics.heightPixels;
+        Log.e(TAG, displayMetrics.widthPixels + ", " + displayMetrics.heightPixels + ", " + SizeUtil.getStatusBarHeight(accessibilityService));
         LayoutInflater inflater = LayoutInflater.from(accessibilityService);
         mConstraintLayout = (ConstraintLayout) inflater.inflate(R.layout.window_float, null);
         mWindowManager.addView(mConstraintLayout, mLayoutParams);
     }
 
-    protected void removeFloatWindow()
+    public void removeFloatWindow()
     {
         if (mConstraintLayout != null)
         {

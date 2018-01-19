@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.accessibility.AccessibilityEvent;
 
 /**
+ * 默认策略
  * @author: WEI
  * @date: 2018/1/15
  */

@@ -10,6 +10,7 @@ import com.wei.permissionsetting.util.OSUtil;
 import com.wei.permissionsetting.util.PackageUtil;
 
 /**
+ * 工厂模式设计，根据不同品牌及系统，生成相应的策略
  * @author: WEI
  * @date: 2018/1/15
  */

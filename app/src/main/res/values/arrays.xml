@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="Xiaomi_miuiV6_permissions">
-        <item >发送彩信</item>
+        <!--<item >发送彩信</item>-->
         <item >电话</item>
-        <item >定位</item>
-        <item >相机</item>
+        <!--<item >定位</item>-->
+        <!--<item >相机</item>-->
         <item >锁屏显示</item>
         <item >显示悬浮窗</item>
     </string-array>
