@@ -228,7 +228,7 @@ public abstract class  IPermissionGuideStrategy
     ConstraintLayout mConstraintLayout;
     WindowManager.LayoutParams mLayoutParams;
     WindowManager mWindowManager;
-    protected void showFloatWindow(AccessibilityService accessibilityService)
+    public void showFloatWindow(AccessibilityService accessibilityService)
     {
         mLayoutParams = new WindowManager.LayoutParams();
         mWindowManager = (WindowManager) accessibilityService.getApplication().getSystemService(Context.WINDOW_SERVICE);

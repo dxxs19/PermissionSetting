@@ -1,6 +1,7 @@
 package com.wei.permissionsetting;
 
 import android.accessibilityservice.AccessibilityService;
+import android.app.AppOpsManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.wei.permissionsetting.permission.PermissionAccessibilityService;
 import com.wei.permissionsetting.permission.PermissionGuideGenerator;
 import com.wei.permissionsetting.permission.strategy.IPermissionGuideStrategy;
 import com.wei.permissionsetting.service.MyService;
+import com.wei.permissionsetting.util.OSUtil;
 import com.wei.permissionsetting.widget.ToastTips;
 
 /**
@@ -37,6 +39,14 @@ public class MainActivity extends AppCompatActivity
         PermissionAccessibilityService.setAccessibilityListener(mListenner);
         startService(new Intent(this, MyService.class));
         isFinish = false;
+        try {
+
+            Log.e(TAG, "悬浮窗权限是否打开？" + OSUtil.checkOp(this, 24));
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     private PermissionAccessibilityService.AccessibilityListener mListenner = new PermissionAccessibilityService.AccessibilityListener()
