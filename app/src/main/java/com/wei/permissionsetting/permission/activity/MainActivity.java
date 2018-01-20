@@ -1,7 +1,7 @@
-package com.wei.permissionsetting;
+package com.wei.permissionsetting.permission.activity;
 
 import android.accessibilityservice.AccessibilityService;
-import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,14 +9,15 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
+import com.wei.permissionsetting.R;
 import com.wei.permissionsetting.permission.PermissionAccessibilityService;
 import com.wei.permissionsetting.permission.PermissionGuideGenerator;
 import com.wei.permissionsetting.permission.strategy.IPermissionGuideStrategy;
 import com.wei.permissionsetting.service.MyService;
+import com.wei.permissionsetting.service.OtherProcessService;
 import com.wei.permissionsetting.util.OSUtil;
 import com.wei.permissionsetting.widget.ToastTips;
 
@@ -32,12 +33,20 @@ public class MainActivity extends AppCompatActivity
     private IPermissionGuideStrategy mStrategy;
     public static boolean isFinish = false;
 
+    public static void startMainActivity(Context context)
+    {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PermissionAccessibilityService.setAccessibilityListener(mListenner);
         startService(new Intent(this, MyService.class));
+        startService(new Intent(this, OtherProcessService.class));
         isFinish = false;
         try {
 

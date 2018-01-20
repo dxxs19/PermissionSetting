@@ -1,12 +1,10 @@
 package com.wei.permissionsetting.permission;
 
 import android.accessibilityservice.AccessibilityService;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.wei.permissionsetting.MainActivity;
+import com.wei.permissionsetting.permission.activity.MainActivity;
 
 /**
  * 无障碍服务，事件由此分发至各种机型策略处理
