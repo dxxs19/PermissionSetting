@@ -139,7 +139,7 @@ public abstract class  IPermissionGuideStrategy
             return accessibilityNodeInfo;
         }
         AccessibilityNodeInfo parent = accessibilityNodeInfo.getParent();
-        while (!parent.isClickable())
+        while ( parent != null && !parent.isClickable())
         {
             getClickableParent(parent);
         }
