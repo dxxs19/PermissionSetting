@@ -7,9 +7,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.wei.permissionsetting.R;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private AccessibilityService mService;
     private IPermissionGuideStrategy mStrategy;
     public static boolean isFinish = false;
+    private EditText mContentEdtTxt;
 
     public static void startMainActivity(Context context)
     {
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity
         {
             Log.e(TAG, e.getMessage());
         }
+        mContentEdtTxt = (EditText)findViewById(R.id.edtTxt_content);
     }
 
     private PermissionAccessibilityService.AccessibilityListener mListenner = new PermissionAccessibilityService.AccessibilityListener()
@@ -99,9 +103,12 @@ public class MainActivity extends AppCompatActivity
         {
             Log.e(TAG, "移除悬浮窗");
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mService.disableSelf();
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            if (mService != null)
+//            {
+//                mService.disableSelf();
+//            }
+//        }
         isFinish = true;
     }
 
@@ -125,5 +132,30 @@ public class MainActivity extends AppCompatActivity
         Intent mAccessibleIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
         mAccessibleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mAccessibleIntent);
+    }
+
+    public void startToActivity(View view)
+    {
+        Log.e(TAG, "--- startToActivity ---");
+        Intent localIntent = new Intent();
+
+        // mVersion = 4/5 自启管理 actionAutoBootPermission
+//        localIntent.setClassName("com.huawei.systemmanager", "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity");
+        // mVersion = 6 权限管理 actionAutoBootPermission
+//        localIntent.setClassName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity");
+        // mVersion = 9 权限管理 actionAutoBootPermission
+//        localIntent.setClassName("com.huawei.systemmanager", "com.huawei.systemmanager.appcontrol.activity.StartupAppControlActivity");
+        //        localIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // actionBackgroundPermisssion() 锁屏清理应用
+//        localIntent.setClassName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity");
+
+        // actionWhiteListPermisssion()
+//        localIntent.setClassName("com.huawei.systemmanager", "com.huawei.systemmanager.mainscreen.MainScreenActivity");
+
+        // actionDozePermission 忽略电池优化action
+        localIntent.setAction("android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS");
+
+        startActivity(localIntent);
     }
 }
