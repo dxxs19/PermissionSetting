@@ -102,7 +102,7 @@ public class MiuiV6PermissionGuideStrategy extends IPermissionGuideStrategy
         mIsFinish = false;
         // 跳到自启动设置界面
         actionAutoBootPermission();
-        showFloatWindow(paramAccessibilityService);
+//        showFloatWindow(paramAccessibilityService);
     }
 
     private boolean mIsFinish = false;

@@ -56,62 +56,67 @@
             android:process=":OtherProcessService">
         </service>
 
-        <!--<service android:enabled="true" android:name="com.eguan.monitor.fangzhou.service.MonitorService" android:process=":monitorService"/>-->
-        <!--<service android:name="com.eguan.monitor.fangzhou.service.MonitorJobService" android:permission="android.permission.BIND_JOB_SERVICE"-->
-                 <!--android:process=":monitorService"/>-->
+        <!-- <service android:enabled="true" android:name="com.eguan.monitor.fangzhou.service.MonitorService" android:process=":monitorService"/> -->
+        <!-- <service android:name="com.eguan.monitor.fangzhou.service.MonitorJobService" android:permission="android.permission.BIND_JOB_SERVICE" -->
+        <!-- android:process=":monitorService"/> -->
 
-        <!--<receiver-->
-            <!--android:name=".receiver.PresentationServiceReceiver"-->
-            <!--android:exported="true"-->
-            <!--android:enabled="true"-->
-            <!--android:process=":ctremote">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.PHONE_STATE"/>-->
-                <!--<action android:name="android.intent.action.NEW_OUTGOING_CALL" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
-                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>-->
-                <!--<action android:name="android.intent.action.BATTERY_LOW"/>-->
-                <!--<action android:name="android.intent.action.BATTERY_OKAY"/>-->
-                <!--<action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>-->
-                <!--<action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_CHECKING"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_EJECT"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_MOUNTED"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_REMOVED"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_SCANNER_SCAN_FILE"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_SCANNER_STARTED"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_SHARED"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_UNMOUNTABLE"/>-->
-                <!--<action android:name="android.intent.action.MEDIA_UNMOUNTED"/>-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.PACKAGE_ADDED"/>-->
-                <!--<action android:name="android.intent.action.PACKAGE_CHANGED"/>-->
-                <!--<action android:name="android.intent.action.PACKAGE_REMOVED"/>-->
-                <!--<action android:name="android.intent.action.PACKAGE_REPLACED"/>-->
 
-                <!--<data android:scheme="package"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-        <!--<receiver-->
-            <!--android:name=".receiver.SystemStartReceiver"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true">-->
-            <!--<intent-filter android:priority="9999">-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
-                <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
-                <!--<action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>-->
-                <!--<action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
+        <!-- <receiver -->
+        <!-- android:name=".receiver.PresentationServiceReceiver" -->
+        <!-- android:exported="true" -->
+        <!-- android:enabled="true" -->
+        <!-- android:process=":ctremote"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.PHONE_STATE"/> -->
+        <!-- <action android:name="android.intent.action.NEW_OUTGOING_CALL" /> -->
+        <!-- </intent-filter> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.BOOT_COMPLETED"/> -->
+        <!-- <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/> -->
+        <!-- <action android:name="android.intent.action.BATTERY_LOW"/> -->
+        <!-- <action android:name="android.intent.action.BATTERY_OKAY"/> -->
+        <!-- <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/> -->
+        <!-- <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_CHECKING"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_EJECT"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_MOUNTED"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_REMOVED"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_SCANNER_SCAN_FILE"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_SCANNER_STARTED"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_SHARED"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_UNMOUNTABLE"/> -->
+        <!-- <action android:name="android.intent.action.MEDIA_UNMOUNTED"/> -->
+        <!-- </intent-filter> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.PACKAGE_ADDED"/> -->
+        <!-- <action android:name="android.intent.action.PACKAGE_CHANGED"/> -->
+        <!-- <action android:name="android.intent.action.PACKAGE_REMOVED"/> -->
+        <!-- <action android:name="android.intent.action.PACKAGE_REPLACED"/> -->
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+
+        <!-- <data android:scheme="package"/> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+        <!-- <receiver -->
+        <!-- android:name=".receiver.SystemStartReceiver" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter android:priority="9999"> -->
+        <!-- <action android:name="android.intent.action.BOOT_COMPLETED"/> -->
+        <!-- <action android:name="android.intent.action.USER_PRESENT"/> -->
+        <!-- <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/> -->
+        <!-- <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/> -->
+        <!-- </intent-filter> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.BOOT_COMPLETED"/> -->
+
+
+        <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+        <activity android:name=".permission.activity.SecondActivity">
+        </activity>
     </application>
 
 </manifest>

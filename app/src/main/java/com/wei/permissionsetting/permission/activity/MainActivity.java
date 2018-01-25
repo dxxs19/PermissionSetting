@@ -113,12 +113,28 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
-//        showToast();
+        Log.e(TAG, "--- onResume ---");
+        if (isShouldShowToast())
+        {
+            showToast();
+        }
+
+//        try {
+//            Class<?> secondClz = Class.forName("com.wei.permissionsetting.permission.activity.SecondActivity");
+//            startActivity(new Intent(this, secondClz));
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
 //        Button button = new Button(this);
 //        button.setOnClickListener();
+    }
 
+    public boolean isShouldShowToast() {
+        return false;
     }
 
     public void showToast()
@@ -156,6 +172,13 @@ public class MainActivity extends AppCompatActivity
         // actionDozePermission 忽略电池优化action
         localIntent.setAction("android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS");
 
-        startActivity(localIntent);
+        try
+        {
+            startActivity(localIntent);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage());
+        }
     }
 }
